@@ -27,5 +27,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, com.univalle.javiermurguia.proyectotelefericoturistico2.Activities.ARActivity.class));
             }
         });
+        findViewById(R.id.buttonIrAMap).setOnClickListener(new View.OnClickListener() {
+            private long mLastClickTime = 0;
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(MainActivity.this, com.univalle.javiermurguia.proyectotelefericoturistico2.Activities.LoadingActivity.class));
+            }
+        });
     }
 }
