@@ -119,9 +119,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //cargamos todos los puntos de interes como marcadores al mapa
-        for (Marcador m: this.marcadores){
+        /*for (Marcador m: this.marcadores){
             this.mMap.addMarker(new MarkerOptions().position(new LatLng(m.getLatitud(),m.getLongitud())).title(m.getNombre()));
-        }
+        }*/
         //Para inicializar el mapa vamos a la Univalle, es como el predeterminado
         this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(

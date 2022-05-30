@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void pressBotonUsuario() throws JSONException {
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-        String url ="http://10.166.14.114:5000/api/login";
+        String url ="http://150.230.90.26/api/login";
         JSONObject content = new JSONObject();
         content.put("email",this.textoCorreo.getText());
         content.put("password",this.textoContrasenia.getText());

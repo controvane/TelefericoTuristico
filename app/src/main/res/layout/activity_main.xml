@@ -30,4 +30,13 @@
         app:layout_constraintTop_toBottomOf="@+id/button_start"
         app:layout_constraintVertical_bias="0.213" />
 
+    <ImageButton
+        android:id="@+id/buttonOpciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_manage"
+        tools:ignore="SpeakableTextPresentCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

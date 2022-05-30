@@ -75,18 +75,24 @@ public class LoadingActivity extends AppCompatActivity {
     //esta funcion crea la animación de carga
     private void cambiarTexto(){
         Log.d("flag", "estoy cambiando el texto");
-        int estado = LoadingActivity.this.cargando.getText().toString().length();
-        if(estado < 9){
-            LoadingActivity.this.cargando.setText("Cargando .");
-            return;
-        }else if(estado < 11){
-            LoadingActivity.this.cargando.setText("Cargando . .");
-            return;
-        }else if(estado < 13){
-            LoadingActivity.this.cargando.setText("Cargando . . .");
-            return;
-        }else{
-            LoadingActivity.this.cargando.setText("Cargando");
+        //Este bloque try catch es una solución muy a lo bruto, es importante verificar porque no puede traer el text view cargando
+        try{
+            int estado = LoadingActivity.this.cargando.getText().toString().length();
+            if(estado < 9){
+                LoadingActivity.this.cargando.setText("Cargando .");
+                return;
+            }else if(estado < 11){
+                LoadingActivity.this.cargando.setText("Cargando . .");
+                return;
+            }else if(estado < 13){
+                LoadingActivity.this.cargando.setText("Cargando . . .");
+                return;
+            }else{
+                LoadingActivity.this.cargando.setText("Cargando");
+                return;
+            }
+        }
+        catch (Exception ex){
             return;
         }
     }

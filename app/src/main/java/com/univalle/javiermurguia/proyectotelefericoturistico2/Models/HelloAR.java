@@ -139,19 +139,10 @@ public class HelloAR
         camera.setFocusMode(CameraDeviceFocusMode.Continousauto);
         //Creamos los trackers y los agregamos a nuestra lista de trackers para que sean asignados a sus videos objetivos
         if (!status) { return; }
-        /*ImageTracker trackerBlanco = ImageTracker.create();
-        ImageTracker trackerMarron = ImageTracker.create();
-        ImageTracker trackerNaranja = ImageTracker.create();
-        loadFromImage(trackerBlanco, "QRTelefericoBlanco.jpeg", "LineaBlanca");
-        loadFromImage(trackerMarron, "QRTelefericoMarron.jpeg", "LineaMarron");
-        loadFromImage(trackerNaranja, "QRTelefericoNaranja.jpeg", "LineaNaranja");
-        trackers.add(trackerBlanco);
-        trackers.add(trackerMarron);
-        trackers.add(trackerNaranja);*/
         ImageTracker tracker = ImageTracker.create();
-        loadFromImage(tracker, "QRTelefericoBlanco.jpeg", "LineaBlanca");
-        loadFromImage(tracker, "QRTelefericoMarron.jpeg", "LineaMarron");
-        loadFromImage(tracker, "QRTelefericoNaranja.jpeg", "LineaNaranja");
+        loadFromImage(tracker, "app/src/main/java/com/univalle/javiermurguia/proyectotelefericoturistico2/assets/QRTelefericoBlanco.jpg", "LineaBlanca");
+        loadFromImage(tracker, "app/src/main/java/com/univalle/javiermurguia/proyectotelefericoturistico2/assets/QRTelefericoMarron.jpg", "LineaMarron");
+        loadFromImage(tracker, "app/src/main/java/com/univalle/javiermurguia/proyectotelefericoturistico2/assets/QRTelefericoNaranja.jpg", "LineaNaranja");
         trackers.add(tracker);
         feedbackFrameFork = FeedbackFrameFork.create(trackers.size());
 
@@ -295,9 +286,7 @@ public class HelloAR
                                     String target_name = target.name();
                                     if (target_name.equals("LineaBlanca") && video_renderers.get(0).texId() != 0) {
                                         video = new ARVideo();
-                                        String url = "https://www.youtube.com/watch?v=HIOa1TAlmQc";
-                                        String fixedUrl = url.replaceAll(" ", "%20");
-                                        video.openStreamingVideo(fixedUrl, video_renderers.get(2).texId(), scheduler);
+                                        video.openVideoFile("TelefericoBlanco.mp4", video_renderers.get(0).texId(), scheduler);
                                         current_video_renderer = video_renderers.get(0);
                                     } else if (target_name.equals("LineaMarron") && video_renderers.get(1).texId() != 0) {
                                         video = new ARVideo();
