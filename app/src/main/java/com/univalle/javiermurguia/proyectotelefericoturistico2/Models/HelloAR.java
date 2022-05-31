@@ -294,9 +294,7 @@ public class HelloAR
                                         current_video_renderer = video_renderers.get(1);
                                     } else if (target_name.equals("LineaNaranja") && video_renderers.get(2).texId() != 0) {
                                         video = new ARVideo();
-                                        String url = "https://www.youtube.com/embed/ksb_ytu2n7U?autoplay=1";
-                                        String fixedUrl = url.replaceAll(" ", "%20");
-                                        video.openStreamingVideo(fixedUrl, video_renderers.get(2).texId(), scheduler);
+                                        video.openVideoFile("TelefericoNaranja.mp4", video_renderers.get(2).texId(), scheduler);
                                         current_video_renderer = video_renderers.get(2);
                                     }
                                 }
