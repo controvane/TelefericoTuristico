@@ -23,6 +23,9 @@ import com.univalle.javiermurguia.proyectotelefericoturistico2.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button botonInvitado, botonUsuario;
@@ -78,28 +81,33 @@ public class LoginActivity extends AppCompatActivity {
     protected void pressBotonUsuario() throws JSONException {
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
         String url ="http://150.230.90.26/api/login";
-        JSONObject content = new JSONObject();
-        content.put("email",this.textoCorreo.getText());
-        content.put("password",this.textoContrasenia.getText());
-        JsonObjectRequest jSonRequest = new JsonObjectRequest(Request.Method.POST, url,content, object -> fillApiContent(object), error -> Log.d("aviso","Ooops, hubo un error"));
+        Map<String,String> loginArgs = new HashMap<String,String>();
+        loginArgs.put("email",this.textoCorreo.getText().toString());
+        loginArgs.put("password",this.textoContrasenia.getText().toString());
+        JsonObjectRequest jSonRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,new JSONObject(loginArgs),
+                object -> fillApiContent(object),
+                error -> Log.d("aviso","Ooops, hubo un error "+error.getMessage()));
         queue.add(jSonRequest);
-        if(this.userChecker){
-            this.intento.putExtra("email",this.textoCorreo.getText());
-            this.intento.putExtra("pass",this.textoContrasenia.getText());
-            startActivity(this.intento);
-            this.finish();
-            return;
-        }
-        Toast.makeText(this,"email o contraseña erroneos",Toast.LENGTH_LONG).show();
         return;
     }
 
     private void fillApiContent(JSONObject object){
         try {
-            object.getJSONObject("error");
+            if(object.getBoolean("enabled")){
+                this.userChecker = true;
+                this.intento.putExtra("email",this.textoCorreo.getText());
+                this.intento.putExtra("pass",this.textoContrasenia.getText());
+                startActivity(this.intento);
+                this.finish();
+                return;
+            }
             this.userChecker = false;
+            Toast.makeText(this,"email o contraseña erroneos",Toast.LENGTH_LONG).show();
         }catch (JSONException ex){
-            this.userChecker = true;
+            this.userChecker = false;
+            Toast.makeText(this,"usuario no encontrado",Toast.LENGTH_LONG).show();
         }
     }
 }
