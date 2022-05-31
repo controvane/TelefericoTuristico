@@ -140,9 +140,9 @@ public class HelloAR
         //Creamos los trackers y los agregamos a nuestra lista de trackers para que sean asignados a sus videos objetivos
         if (!status) { return; }
         ImageTracker tracker = ImageTracker.create();
-        loadFromImage(tracker, "app/src/main/java/com/univalle/javiermurguia/proyectotelefericoturistico2/assets/QRTelefericoBlanco.jpg", "LineaBlanca");
-        loadFromImage(tracker, "app/src/main/java/com/univalle/javiermurguia/proyectotelefericoturistico2/assets/QRTelefericoMarron.jpg", "LineaMarron");
-        loadFromImage(tracker, "app/src/main/java/com/univalle/javiermurguia/proyectotelefericoturistico2/assets/QRTelefericoNaranja.jpg", "LineaNaranja");
+        loadFromImage(tracker, "QRTelefericoBlanco.jpg", "LineaBlanca");
+        loadFromImage(tracker, "QRTelefericoMarron.jpg", "LineaMarron");
+        loadFromImage(tracker, "QRTelefericoNaranja.jpg", "LineaNaranja");
         trackers.add(tracker);
         feedbackFrameFork = FeedbackFrameFork.create(trackers.size());
 
@@ -290,13 +290,11 @@ public class HelloAR
                                         current_video_renderer = video_renderers.get(0);
                                     } else if (target_name.equals("LineaMarron") && video_renderers.get(1).texId() != 0) {
                                         video = new ARVideo();
-                                        String url = "https://www.youtube.com/watch?v=9AjZ-4IqWHI";
-                                        String fixedUrl = url.replaceAll(" ", "%20");
-                                        video.openStreamingVideo(fixedUrl, video_renderers.get(2).texId(), scheduler);
+                                        video.openVideoFile("TelefericoCafe.mp4", video_renderers.get(1).texId(), scheduler);
                                         current_video_renderer = video_renderers.get(1);
                                     } else if (target_name.equals("LineaNaranja") && video_renderers.get(2).texId() != 0) {
                                         video = new ARVideo();
-                                        String url = "https://www.youtube.com/watch?v=ksb_ytu2n7U";
+                                        String url = "https://www.youtube.com/embed/ksb_ytu2n7U?autoplay=1";
                                         String fixedUrl = url.replaceAll(" ", "%20");
                                         video.openStreamingVideo(fixedUrl, video_renderers.get(2).texId(), scheduler);
                                         current_video_renderer = video_renderers.get(2);

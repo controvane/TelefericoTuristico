@@ -135,7 +135,7 @@ public class LoadingActivity extends AppCompatActivity {
     private void fillApiContent(JSONObject object){
         JSONObject content;
         try {
-            JSONArray array = object.getJSONArray("results");
+            JSONArray array = object.getJSONArray("lineas");
             Log.d("flag", "Llenando lista");
             for (int i = 0;i < array.length(); i++) {
                 content = array.getJSONObject(i);
