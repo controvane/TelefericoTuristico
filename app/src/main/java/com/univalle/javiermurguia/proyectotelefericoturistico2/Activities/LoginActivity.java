@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button botonInvitado, botonUsuario;
+    Button botonInvitado, botonUsuario, botonNuevoUsuario;
     EditText textoCorreo, textoContrasenia;
     Intent intento;
     Boolean userChecker;
@@ -47,38 +47,38 @@ public class LoginActivity extends AppCompatActivity {
         this.userChecker = false;
         this.botonInvitado = findViewById(R.id.buttonInvitado);
         this.botonUsuario = findViewById(R.id.buttonUsuario);
+        this.botonNuevoUsuario = findViewById(R.id.buttonNuevoUsuario);
         this.textoCorreo = findViewById(R.id.editTextCorreo);
         this.textoContrasenia = findViewById(R.id.editTextPassword);
 
-        this.intento = new Intent(this.getApplicationContext(), MainActivity.class);
-
-        this.botonUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try{
-                    pressBotonUsuario();
-                }
-                catch(JSONException ex){
-                    Log.d("FalloLogin","Se Jorobó el Login");
-                }
-
+        this.botonUsuario.setOnClickListener(view -> {
+            try{
+                pressBotonUsuario();
             }
+            catch(JSONException ex){
+                Log.d("FalloLogin","Se Jorobó el Login");
+            }
+
         });
 
-        this.botonInvitado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pressBotonInvitado();
-            }
-        });
+        this.botonInvitado.setOnClickListener(view -> pressBotonInvitado());
+        this.botonNuevoUsuario.setOnClickListener(view -> pressCrearUsuario());
     }
 
     protected void pressBotonInvitado(){
+        this.intento = new Intent(this.getApplicationContext(), MainActivity.class);
+        startActivity(this.intento);
+        this.finish();
+    }
+
+    protected void pressCrearUsuario(){
+        this.intento = new Intent(this.getApplicationContext(), CreateUserActivity.class);
         startActivity(this.intento);
         this.finish();
     }
 
     protected void pressBotonUsuario() throws JSONException {
+        this.intento = new Intent(this.getApplicationContext(), MainActivity.class);
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
         String url ="http://150.230.90.26/api/login";
         Map<String,String> loginArgs = new HashMap<String,String>();
@@ -97,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             if(object.getBoolean("enabled")){
                 this.userChecker = true;
-                this.intento.putExtra("email",this.textoCorreo.getText());
-                this.intento.putExtra("pass",this.textoContrasenia.getText());
+                this.intento.putExtra("user_name",object.getString("user_name"));
                 startActivity(this.intento);
                 this.finish();
                 return;

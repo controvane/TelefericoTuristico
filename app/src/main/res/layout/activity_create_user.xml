@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.CreateUserActivity">
+
+    <TextView
+        android:id="@+id/textViewCrearCorreo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Correo:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextCrearEmail"
+        app:layout_constraintHorizontal_bias="0.431"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCrearNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Nombre:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewCrearCorreo"
+        app:layout_constraintStart_toStartOf="@+id/textViewCrearCorreo"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCrearCorreo" />
+
+    <TextView
+        android:id="@+id/textViewCrearApellido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Apellido:"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewCrearNombre"
+        app:layout_constraintStart_toStartOf="@+id/textViewCrearNombre"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCrearNombre" />
+
+    <TextView
+        android:id="@+id/textViewCrearPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Contraseña: "
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewCrearApellido"
+        app:layout_constraintStart_toStartOf="@+id/textViewCrearApellido"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCrearApellido" />
+
+    <EditText
+        android:id="@+id/editTextCrearEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCrearCorreo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewCrearCorreo"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/editTextCrearNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCrearNombre"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCrearEmail"
+        app:layout_constraintStart_toStartOf="@+id/editTextCrearEmail"
+        app:layout_constraintTop_toTopOf="@+id/textViewCrearNombre"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/editTextCrearApellido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCrearApellido"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCrearNombre"
+        app:layout_constraintStart_toStartOf="@+id/editTextCrearNombre"
+        app:layout_constraintTop_toTopOf="@+id/textViewCrearApellido"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/editTextCrearPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCrearPass"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCrearApellido"
+        app:layout_constraintStart_toStartOf="@+id/editTextCrearApellido"
+        app:layout_constraintTop_toTopOf="@+id/textViewCrearPass"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/buttonCrearUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear Usuario"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCrearAlias"
+        app:layout_constraintStart_toStartOf="@+id/textViewCrearNombreUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCrearAlias" />
+
+    <TextView
+        android:id="@+id/textViewCrearNombreUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Alias: "
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewCrearPass"
+        app:layout_constraintStart_toStartOf="@+id/textViewCrearPass"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCrearPass" />
+
+    <EditText
+        android:id="@+id/editTextCrearAlias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCrearNombreUsuario"
+        app:layout_constraintEnd_toEndOf="@+id/editTextCrearPass"
+        app:layout_constraintStart_toStartOf="@+id/editTextCrearPass"
+        app:layout_constraintTop_toTopOf="@+id/textViewCrearNombreUsuario"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+</androidx.constraintlayout.widget.ConstraintLayout>
