@@ -6,23 +6,26 @@ public class Marcador implements Serializable {
     String nombre;
     String descripcion;
     String urlImage;
+    String linea;
     boolean dragable;
     double latitud;
     double longitud;
 
-    public Marcador(String nombre, String descripcion, String urlImage, boolean dragable, double latitud, double longitud) {
+    public Marcador(String nombre, String descripcion, String urlImage, boolean dragable, double latitud, double longitud, String linea) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.urlImage = urlImage;
         this.dragable = dragable;
         this.latitud = latitud;
         this.longitud = longitud;
+        this.linea = linea;
     }
 
-    public Marcador(String nombre, String descripcion, boolean dragable, double latitud, double longitud) {
+    public Marcador(String nombre, String descripcion, String linea, boolean dragable, double latitud, double longitud) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.urlImage = "";
+        this.linea = linea;
         this.dragable = dragable;
         this.latitud = latitud;
         this.longitud = longitud;

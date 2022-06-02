@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.Marcador;
@@ -104,6 +105,10 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.d("flag", "creando el intentd para ir a map");
+                if(LoadingActivity.this.marcadores.size() <= 0){
+                    cargarLista();
+                    return;
+                }
                 Intent intento = new Intent(LoadingActivity.this, MapsActivity.class);
                 intento.putExtra("Marcadores", (Serializable) LoadingActivity.this.marcadores);
                 Log.d("flag", "yendo a map");
@@ -116,14 +121,19 @@ public class LoadingActivity extends AppCompatActivity {
 
     //Con esta funcion accedemos al JSON con la información de los marcadores
     private void cargarLista(){
-        Log.d("flag","creando handler de cargar lista");
+        Log.d("flagCargarLista","creando handler de cargar lista");
         RequestQueue queue = Volley.newRequestQueue(LoadingActivity.this);
         //De Momento con un servidor para Mock ups, es un proyecto de Programación Movil, no Web
-        String url ="https://run.mocky.io/v3/a29d1188-e516-4340-b47a-81edf2806b4d";
+        String url ="http://150.230.90.26/api/routes";
         if (LoadingActivity.this.marcadores.size() <= 0) {
-            JSONObject content = new JSONObject();
-            Log.d("flag", "haciendo request de JSON");
-            JsonObjectRequest jSonRequest = new JsonObjectRequest(Request.Method.POST, url,content, object -> fillApiContent(object), error -> Log.d("aviso","Ooops, hubo un error"));
+            JSONArray content = new JSONArray();
+            Log.d("flagCargarLista", "haciendo request de JSON");
+            JsonArrayRequest jSonRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    url,
+                    content,
+                    object -> fillApiContent(object),
+                    error -> Log.d("aviso","Ooops, hubo un error "+ error.getMessage()));
             queue.add(jSonRequest);
 
         }else if(LoadingActivity.this.marcadores.size() > 0){
@@ -132,19 +142,27 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     //Con esta funcion se carga la lista de marcadores que se enviara a la Activity con el mapa
-    private void fillApiContent(JSONObject object){
-        JSONObject content;
+    private void fillApiContent(JSONArray lineas){
+        JSONObject linea;
+        JSONObject estacion;
+        JSONArray estaciones;
+        JSONObject coords;
         try {
-            JSONArray array = object.getJSONArray("results");
-            Log.d("flag", "Llenando lista");
-            for (int i = 0;i < array.length(); i++) {
-                content = array.getJSONObject(i);
-                LoadingActivity.this.marcadores.add(new Marcador(
-                        content.getString("name"),
-                        content.getString("description"),
-                        content.getBoolean("dragable"),
-                        content.getDouble("latitude"),
-                        content.getDouble("longitude")));
+            Log.d("flagCargarLista", "Llenando lista");
+            for (int i = 0;i < lineas.length(); i++) {
+                linea = lineas.getJSONObject(i);
+                estaciones = linea.getJSONArray("stations");
+                for(int j = 0; j < estaciones.length(); j++){
+                    estacion = estaciones.getJSONObject(j);
+                    coords = estacion.getJSONObject("coords");
+                    LoadingActivity.this.marcadores.add(new Marcador(
+                            estacion.getString("name"),
+                            estacion.getString("description"),
+                            linea.getString("route"),
+                            estacion.getBoolean("draggable"),
+                            coords.getDouble("lat"),
+                            coords.getDouble("lng")));
+                }
             }
         }catch (JSONException ex){
             Log.d("aviso","Hubo un error al extraer datos del Json, Ooops!");
