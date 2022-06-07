@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.User;
 import com.univalle.javiermurguia.proyectotelefericoturistico2.R;
 
 import org.json.JSONException;
@@ -66,7 +67,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void pressBotonInvitado(){
+        User user = new User("Invitado");
         this.intento = new Intent(this.getApplicationContext(), MainActivity.class);
+        this.intento.putExtra("user",user);
         startActivity(this.intento);
         this.finish();
     }
@@ -97,7 +100,17 @@ public class LoginActivity extends AppCompatActivity {
         try {
             if(object.getBoolean("enabled")){
                 this.userChecker = true;
-                this.intento.putExtra("user_name",object.getString("user_name"));
+                User user = new User(
+                        object.getString("email"),
+                        object.getBoolean("enabled"),
+                        object.getString("first_name"),
+                        object.getString("id_token"),
+                        object.getString("last_name"),
+                        object.getString("rol"),
+                        object.getString("url_avatar"),
+                        object.getString("user_name"),
+                        object.getString("uuid"));
+                this.intento.putExtra("user",user);
                 startActivity(this.intento);
                 this.finish();
                 return;

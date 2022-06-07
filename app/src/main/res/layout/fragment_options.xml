@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.OptionsFragment">
+
+    <TextView
+        android:id="@+id/textViewFragNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonFragCambiarPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Cambiar Contraseña"
+        app:layout_constraintEnd_toEndOf="@+id/textViewFragNombre"
+        app:layout_constraintStart_toStartOf="@+id/textViewFragNombre"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFragNombre" />
+
+    <Button
+        android:id="@+id/buttonFragCerrarSesión"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Cerrar Sesión"
+        app:layout_constraintEnd_toEndOf="@+id/buttonFragCambiarPass"
+        app:layout_constraintStart_toStartOf="@+id/buttonFragCambiarPass"
+        app:layout_constraintTop_toBottomOf="@+id/buttonFragCambiarPass" />
+
+    <Button
+        android:id="@+id/buttonFragCerrarOpciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Cerrar Opciones"
+        app:layout_constraintEnd_toEndOf="@+id/buttonFragCerrarSesión"
+        app:layout_constraintStart_toStartOf="@+id/buttonFragCerrarSesión"
+        app:layout_constraintTop_toBottomOf="@+id/buttonFragCerrarSesión" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,36 +3,66 @@ package com.univalle.javiermurguia.proyectotelefericoturistico2.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.Marker;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.Marcador;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.MarkerViewModel;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.User;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.UserViewModel;
 import com.univalle.javiermurguia.proyectotelefericoturistico2.R;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView textViewAlias;
+    private TextView textViewAlias;
+    private UserViewModel userViewModel;
+    private LinearLayout.LayoutParams params;
+    private FragmentContainerView optionsFragment;
+    private User user;
+    private ConstraintLayout controles;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         this.textViewAlias = findViewById(R.id.textViewAlias);
-        Intent intento = getIntent();
+        this.user= (User) getIntent().getSerializableExtra("user");
         try{
-            if(intento.getStringExtra("user_name").length() > 0){
-                this.textViewAlias.setText("Bienvenido "+intento.getStringExtra("user_name"));
+            if(user.isEnabled()){
+                this.textViewAlias.setText("Bienvenido "+user.getUserName());
             }
             else {
                 this.textViewAlias.setText("");
             }
         }
-        catch(NullPointerException ex){
+        catch(Exception ex){
             this.textViewAlias.setText("");
         }
-
+        this.userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        this.userViewModel.getUser().observe(this, userView -> hideOptionsFragment(userView));
+        this.optionsFragment = findViewById(R.id.opciones);
+        this.controles = findViewById(R.id.controles);
+        this.params = new LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.MATCH_PARENT,0);
+        this.optionsFragment.setLayoutParams(this.params);
+        this.controles.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        0,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1f
+                )
+        );
         findViewById(R.id.button_start).setOnClickListener(new View.OnClickListener() {
             private long mLastClickTime = 0;
             @Override
@@ -41,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(MainActivity.this, com.univalle.javiermurguia.proyectotelefericoturistico2.Activities.ARActivity.class));
+                startActivity(new Intent(MainActivity.this, ARActivity.class));
             }
         });
         findViewById(R.id.buttonIrAMap).setOnClickListener(new View.OnClickListener() {
@@ -52,8 +82,41 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(MainActivity.this, com.univalle.javiermurguia.proyectotelefericoturistico2.Activities.LoadingActivity.class));
+                startActivity(new Intent(MainActivity.this, LoadingActivity.class));
             }
         });
+        findViewById(R.id.buttonOpciones).setOnClickListener(view -> infoOfUser(this.user));
+    }
+
+    private void hideOptionsFragment(User user){
+        if(!user.isShow()){
+            this.params.weight = 0f;
+            this.optionsFragment.setLayoutParams(this.params);
+            this.controles.setLayoutParams(
+                    new LinearLayout.LayoutParams(
+                            0,
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            1f
+                    )
+            );
+        }
+    }
+
+    public boolean infoOfUser(User user){
+        user.setShow(true);
+        if(user.isShow()){
+            Log.d("creandoOnClick", "estoy dentro del if del for de infoOfMarker");
+            this.params.weight = 1f;
+            this.optionsFragment.setLayoutParams(this.params);
+            this.controles.setLayoutParams(
+                    new LinearLayout.LayoutParams(
+                            0,
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            0f
+                    )
+            );
+            this.userViewModel.setUser(user);
+        }
+        return true;
     }
 }
