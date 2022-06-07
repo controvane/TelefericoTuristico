@@ -93,8 +93,8 @@ public class OptionsFragment extends Fragment {
             return;
         }
         Intent intento = new Intent(getActivity(), CambiarPassActivity.class);
+        intento.putExtra("user",this.user);
         startActivity(intento);
-        getActivity().finish();
     }
 
     private void checkLogout(){
