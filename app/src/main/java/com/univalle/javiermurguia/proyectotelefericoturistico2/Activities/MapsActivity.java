@@ -138,6 +138,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 17));
         this.mMap.setOnMarkerClickListener(marker -> infoOfMarker(marker));
         getMyLocation();
+        mMap.setOnCameraMoveListener(() -> checkDrawLines());
+        mMap.setOnCameraIdleListener(() -> checkDrawLines());
+        checkDrawLines();
+    }
+
+    public void checkDrawLines(){
+        if(this.polylines.size() > 0){
+            for(Polyline poly : this.polylines){
+                poly.remove();
+            }
+        }
+        drawLines();
     }
 
     // revisar si esto funciona
@@ -152,27 +164,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             lineas.get(marker.getLinea()).add(marker);
         }
-        Polyline poly;
+        this.polylines.clear();
         for (String key : lineas.keySet()){
             PolylineOptions latlang = new PolylineOptions();
             for(Marcador marker: lineas.get(key)){
                 latlang.add(new LatLng(marker.getLatitud(),marker.getLongitud()));
             }
             if(lineas.get(key).get(0).getLinea().equals("blanca")){
-               poly  = mMap.addPolyline(latlang.width(2).color(Color.WHITE).geodesic(false));
+               this.polylines.add(mMap.addPolyline(latlang.width(5).color(Color.WHITE).geodesic(false)));
             }
             else if(lineas.get(key).get(0).getLinea().equals("Linea Naranja")){
-                poly  = mMap.addPolyline(latlang.width(2).color(Color.YELLOW).geodesic(false));
+                this.polylines.add(mMap.addPolyline(latlang.width(5).color(Color.parseColor("#DA8C25")).geodesic(false)));
             }
             else if(lineas.get(key).get(0).getLinea().equals("Linea Café")){
-                poly  = mMap.addPolyline(latlang.width(2).color(Color.RED).geodesic(false));
+                this.polylines.add(mMap.addPolyline(latlang.width(5).color(Color.parseColor("#331900")).geodesic(false)));
             }
-            else{
-                poly = null;
-            }
-            this.polylines.add(poly);
         }
     }
+
 
 
     //Esta función permite cargar el fragment de información, tecnicamente el fragment ya esta ahi, pero vuelve todo visible desde el otro lado

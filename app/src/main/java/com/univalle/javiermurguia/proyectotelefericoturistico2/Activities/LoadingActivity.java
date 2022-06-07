@@ -37,7 +37,7 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.marcadores = new ArrayList<Marcador>();
+        this.marcadores = new ArrayList<>();
         this.cargando = findViewById(R.id.textViewCargando);
         // este Thread es para poder cargar el Json sin Colgar la app
         this.hiloJson = new Thread(() -> {
@@ -123,7 +123,6 @@ public class LoadingActivity extends AppCompatActivity {
     private void cargarLista(){
         Log.d("flagCargarLista","creando handler de cargar lista");
         RequestQueue queue = Volley.newRequestQueue(LoadingActivity.this);
-        //De Momento con un servidor para Mock ups, es un proyecto de Programación Movil, no Web
         String url ="http://150.230.90.26/api/routes";
         if (LoadingActivity.this.marcadores.size() <= 0) {
             JSONArray content = new JSONArray();
@@ -155,7 +154,7 @@ public class LoadingActivity extends AppCompatActivity {
                 for(int j = 0; j < estaciones.length(); j++){
                     estacion = estaciones.getJSONObject(j);
                     coords = estacion.getJSONObject("coords");
-                    LoadingActivity.this.marcadores.add(new Marcador(
+                    this.marcadores.add(new Marcador(
                             estacion.getString("name"),
                             estacion.getString("description"),
                             linea.getString("route"),
