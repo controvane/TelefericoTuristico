@@ -11,24 +11,14 @@
         android:id="@+id/textViewCambiarPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
-        android:text="Nueva Contraseña:"
+        android:layout_marginEnd="20dp"
+        android:text="Al presionar el boton se le enviara un correo para cambiar su contraseña"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextCambiarPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewCambiarPass"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewCambiarPass"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/buttonChangePass"
@@ -36,7 +26,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Cambiar Contraseña"
-        app:layout_constraintEnd_toEndOf="@+id/editTextCambiarPass"
+        app:layout_constraintEnd_toEndOf="@+id/textViewCambiarPass"
         app:layout_constraintStart_toStartOf="@+id/textViewCambiarPass"
         app:layout_constraintTop_toBottomOf="@+id/textViewCambiarPass" />
+
+    <Button
+        android:id="@+id/buttonCancelarchangePass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Cancelar"
+        app:layout_constraintEnd_toEndOf="@+id/buttonChangePass"
+        app:layout_constraintStart_toStartOf="@+id/buttonChangePass"
+        app:layout_constraintTop_toBottomOf="@+id/buttonChangePass" />
 </androidx.constraintlayout.widget.ConstraintLayout>

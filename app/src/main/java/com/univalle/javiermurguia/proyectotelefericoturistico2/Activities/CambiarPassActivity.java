@@ -24,8 +24,7 @@ import java.util.Map;
 
 public class CambiarPassActivity extends AppCompatActivity {
 
-    private EditText textPass;
-    private Button buttonPass;
+    private Button buttonPass,buttonCancelar;
     private User user;
 
     @Override
@@ -34,8 +33,9 @@ public class CambiarPassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cambiar_pass);
 
         this.user = (User) getIntent().getSerializableExtra("user");
-        this.textPass = findViewById(R.id.editTextCambiarPass);
         this.buttonPass = findViewById(R.id.buttonChangePass);
+        this.buttonCancelar = findViewById(R.id.buttonCancelarchangePass);
+        this.buttonCancelar.setOnClickListener(view -> this.finish());
         this.buttonPass.setOnClickListener(view -> {
             try {
                 pressBotonChangePass();
@@ -48,16 +48,11 @@ public class CambiarPassActivity extends AppCompatActivity {
     protected void pressBotonChangePass() throws JSONException {
         RequestQueue queue = Volley.newRequestQueue(CambiarPassActivity.this);
         String url ="http://150.230.90.26/api/changepassword";
-        Map<String,String> loginArgs = new HashMap<String,String>();
-        loginArgs.put("email",user.getEmail());
-        loginArgs.put("password",this.textPass.getText().toString());
-        if(this.textPass.getText().toString().length() < 6){
-            Toast.makeText(this,"Contraseña demasiado corta",Toast.LENGTH_LONG).show();
-            return;
-        }
+        Map<String,String> args = new HashMap<String,String>();
+        args.put("email",user.getEmail());
         JsonObjectRequest jSonRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                url,new JSONObject(loginArgs),
+                url,new JSONObject(args),
                 object -> fillApiContent(object),
                 error -> Log.d("aviso","Ooops, hubo un error "+error.getMessage()));
         queue.add(jSonRequest);
@@ -66,7 +61,7 @@ public class CambiarPassActivity extends AppCompatActivity {
 
     private void fillApiContent(JSONObject object){
         try {
-            Toast.makeText(this,"Contraseña cambiada correctamente",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Correo de cambio de contraseña enviado correctamente",Toast.LENGTH_LONG).show();
             this.finish();
         }catch (Exception ex){
             Toast.makeText(this,"usuario no encontrado",Toast.LENGTH_LONG).show();

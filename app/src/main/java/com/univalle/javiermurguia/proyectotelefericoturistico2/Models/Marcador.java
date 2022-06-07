@@ -40,6 +40,10 @@ public class Marcador implements Serializable {
         this.longitud = 0;
     }
 
+    public String getLinea() {
+        return linea;
+    }
+
     public String getNombre() {
         return nombre;
     }

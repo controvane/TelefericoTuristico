@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -51,7 +54,10 @@ import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.MarkerView
 import com.univalle.javiermurguia.proyectotelefericoturistico2.R;
 import com.univalle.javiermurguia.proyectotelefericoturistico2.databinding.ActivityMapsBinding;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -65,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MarkerViewModel markerViewModel;
     private FragmentContainerView infoFragment;
     private LinearLayout.LayoutParams params;
+    private List<Polyline> polylines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intento = getIntent();
+        this.polylines = new ArrayList<>();
         this.marcadores = (List<Marcador>) intento.getSerializableExtra("Marcadores");
         this.markerViewModel = new ViewModelProvider(this).get(MarkerViewModel.class);
         this.markerViewModel.getSelectedItem().observe(this, marcador -> hideInfoFragment(marcador));
@@ -132,6 +140,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getMyLocation();
     }
 
+    // revisar si esto funciona
+    public void drawLines(){
+        Map<String,List<Marcador>> lineas = new HashMap<String, List<Marcador>>();
+        for(Marcador marker : this.marcadores){
+            if(!lineas.containsKey(marker.getLinea())){
+                List<Marcador> listaLineas = new ArrayList<>();
+                listaLineas.add(marker);
+                lineas.put(marker.getLinea(), listaLineas);
+                continue;
+            }
+            lineas.get(marker.getLinea()).add(marker);
+        }
+        Polyline poly;
+        for (String key : lineas.keySet()){
+            PolylineOptions latlang = new PolylineOptions();
+            for(Marcador marker: lineas.get(key)){
+                latlang.add(new LatLng(marker.getLatitud(),marker.getLongitud()));
+            }
+            if(lineas.get(key).get(0).getLinea().equals("blanca")){
+               poly  = mMap.addPolyline(latlang.width(2).color(Color.WHITE).geodesic(false));
+            }
+            else if(lineas.get(key).get(0).getLinea().equals("Linea Naranja")){
+                poly  = mMap.addPolyline(latlang.width(2).color(Color.YELLOW).geodesic(false));
+            }
+            else if(lineas.get(key).get(0).getLinea().equals("Linea Café")){
+                poly  = mMap.addPolyline(latlang.width(2).color(Color.RED).geodesic(false));
+            }
+            else{
+                poly = null;
+            }
+            this.polylines.add(poly);
+        }
+    }
 
 
     //Esta función permite cargar el fragment de información, tecnicamente el fragment ya esta ahi, pero vuelve todo visible desde el otro lado
