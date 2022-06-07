@@ -8,11 +8,29 @@
 
 package com.univalle.javiermurguia.proyectotelefericoturistico2.Models;
 
+import android.content.Context;
+import android.content.Intent;
 import android.opengl.GLES30;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Activities.LoginActivity;
+import com.univalle.javiermurguia.proyectotelefericoturistico2.Activities.MainActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.easyar.Buffer;
 import cn.easyar.CameraDevice;
@@ -68,11 +86,14 @@ public class HelloAR
     private OutputFrameFork outputFrameFork;
     private int previousInputFrameIndex = -1;
     private byte[] imageBytes = null;
+    private List<Linea> lineas;
+    Context context;
 
-    public HelloAR()
+    public HelloAR(Context context)
     {
         scheduler = new DelayedCallbackScheduler();
         trackers = new ArrayList<ImageTracker>();
+        this.context = context;
     }
 
     private void loadFromImage(ImageTracker tracker, String path, String name)
@@ -120,10 +141,75 @@ public class HelloAR
         }
     }
 
+    protected void cargarLineas(){
+        try{
+            RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+            String url ="http://150.230.90.26/api/tours";
+            Map<String,String> args = new HashMap<String,String>();
+            JsonArrayRequest jSonRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    url,null,
+                    object -> fillApiContent(object),
+                    error -> Log.d("aviso","Ooops, hubo un error "+error.getMessage()));
+            queue.add(jSonRequest);
+            return;
+        }
+        catch (Exception ex){
+            Log.d("aviso","Error de conexion "+ex.getMessage());
+        }
+    }
+
+    //Aviso que se inicio un tour
+    protected void warnAPI(String uuid){
+        try{
+            RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+            String url ="http://150.230.90.26/api/tour-visit/"+uuid;
+            Map<String,String> args = new HashMap<String,String>();
+            JsonArrayRequest jSonRequest = new JsonArrayRequest(
+                    Request.Method.POST,
+                    url,null,
+                    object -> Log.d("warn","aviso de forma correcta"),
+                    error -> Log.d("aviso","Ooops, hubo un error "+error.getMessage()));
+            queue.add(jSonRequest);
+            return;
+        }
+        catch (Exception ex){
+
+        }
+    }
+
+    private void fillApiContent(JSONArray array){
+        JSONObject linea;
+        try {
+            for (int i = 0; i < array.length(); i++) {
+                linea = array.getJSONObject(i);
+                lineas.add(new Linea(
+                        linea.getBoolean("enable"),
+                        "http://150.230.90.26"+linea.getString("mark"),
+                        linea.getString("name").replaceAll("\\s", ""),
+                        linea.getInt("times_visited"),
+                        linea.getString("uuid"),
+                        "http://150.230.90.26"+linea.getString("video")
+                ));
+            }
+        }catch (JSONException ex){
+        }
+    }
+
+    private Linea getLineaByName(String name){
+        for(Linea linea : lineas){
+            if(linea.getName().equals(name)){
+                return linea;
+            }
+        }
+        return new Linea();
+    }
+
     public void initialize()
     {
         recreate_context();
 
+        lineas = new ArrayList<>();
         camera = CameraDeviceSelector.createCameraDevice(CameraDevicePreference.PreferObjectSensing);
         throttler = InputFrameThrottler.create();
         inputFrameFork = InputFrameFork.create(2);
@@ -133,6 +219,7 @@ public class HelloAR
         i2FAdapter = InputFrameToFeedbackFrameAdapter.create();
         outputFrameFork = OutputFrameFork.create(2);
 
+        cargarLineas();
         boolean status = true;
         status &= camera.openWithPreferredType(CameraDeviceType.Back);;
         camera.setSize(new Vec2I(1280, 960));
@@ -140,8 +227,11 @@ public class HelloAR
         //Creamos los trackers y los agregamos a nuestra lista de trackers para que sean asignados a sus videos objetivos
         if (!status) { return; }
         ImageTracker tracker = ImageTracker.create();
+        /*for(Linea linea : lineas){
+            loadFromImage(tracker, linea.getMark(), linea.getName());
+        }*/
         loadFromImage(tracker, "QRTelefericoBlanco.jpg", "LineaBlanca");
-        loadFromImage(tracker, "QRTelefericoMarron.jpg", "LineaMarron");
+        loadFromImage(tracker, "QRTelefericoMarron.jpg", "LineaCafé");
         loadFromImage(tracker, "QRTelefericoNaranja.jpg", "LineaNaranja");
         trackers.add(tracker);
         feedbackFrameFork = FeedbackFrameFork.create(trackers.size());
@@ -284,17 +374,34 @@ public class HelloAR
                             if (tracked_target == 0) {
                                 if (video == null && video_renderers.size() > 0) {
                                     String target_name = target.name();
+                                    /*for(int i = 0; i < lineas.size(); i++){
+                                        if (target_name.equals(lineas.get(i).getName()) && video_renderers.get(i).texId() != 0) {
+                                            video = new ARVideo();
+                                            video.openStreamingVideo(lineas.get(i).getVideo(), video_renderers.get(i).texId(), scheduler);
+                                            current_video_renderer = video_renderers.get(i);
+                                        }
+                                    }*/
+                                    //Para enviar el uuid al servidor
+                                    Linea linea;
                                     if (target_name.equals("LineaBlanca") && video_renderers.get(0).texId() != 0) {
+                                        linea = getLineaByName("LineaBlanca");
                                         video = new ARVideo();
+                                        //video.openStreamingVideo(linea.getVideo(), video_renderers.get(0).texId(), scheduler);
                                         video.openVideoFile("TelefericoBlanco.mp4", video_renderers.get(0).texId(), scheduler);
+                                        warnAPI(linea.getUuid());
                                         current_video_renderer = video_renderers.get(0);
-                                    } else if (target_name.equals("LineaMarron") && video_renderers.get(1).texId() != 0) {
+                                    } else if (target_name.equals("LineaCafé") && video_renderers.get(1).texId() != 0) {
+                                        linea = getLineaByName("LineaCafé");
                                         video = new ARVideo();
+                                        //video.openStreamingVideo(linea.getVideo(), video_renderers.get(1).texId(), scheduler);
                                         video.openVideoFile("TelefericoCafe.mp4", video_renderers.get(1).texId(), scheduler);
+                                        warnAPI(linea.getUuid());
                                         current_video_renderer = video_renderers.get(1);
                                     } else if (target_name.equals("LineaNaranja") && video_renderers.get(2).texId() != 0) {
+                                        linea = getLineaByName("LineaNaranja");
                                         video = new ARVideo();
                                         video.openVideoFile("TelefericoNaranja.mp4", video_renderers.get(2).texId(), scheduler);
+                                        warnAPI(linea.getUuid());
                                         current_video_renderer = video_renderers.get(2);
                                     }
                                 }

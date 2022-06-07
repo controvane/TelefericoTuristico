@@ -49,7 +49,7 @@ public class GLView extends GLSurfaceView
             public void onSurfaceCreated(GL10 gl, EGLConfig config) {
                 if (!initialized) {
                     initialized = true;
-                    helloAR = new HelloAR();
+                    helloAR = new HelloAR(context);
                     helloAR.initialize();
                 } else {
                     helloAR.recreate_context();
