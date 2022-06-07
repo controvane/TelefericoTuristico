@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.Marker;
 import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.Marcador;
 import com.univalle.javiermurguia.proyectotelefericoturistico2.Models.MarkerViewModel;
@@ -21,7 +25,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         this.controles = findViewById(R.id.controles);
         this.params = new LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.MATCH_PARENT,0);
         this.optionsFragment.setLayoutParams(this.params);
+        checkLogin();
         this.controles.setLayoutParams(
                 new LinearLayout.LayoutParams(
                         0,
@@ -118,5 +127,18 @@ public class MainActivity extends AppCompatActivity {
             this.userViewModel.setUser(user);
         }
         return true;
+    }
+
+    private void checkLogin(){
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+        String url ="http://150.230.90.26/api/user-connect";
+        Map<String,String> args = new HashMap<String,String>();
+        JsonObjectRequest jSonRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,new JSONObject(args),
+                object -> Log.d("registroLogin","Registro realizado exitosamente"),
+                error -> Log.d("aviso","Ooops, hubo un error "+error.getMessage()));
+        queue.add(jSonRequest);
+        return;
     }
 }

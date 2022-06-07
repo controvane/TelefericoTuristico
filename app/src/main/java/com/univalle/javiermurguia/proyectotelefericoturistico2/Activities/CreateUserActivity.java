@@ -69,6 +69,18 @@ public class CreateUserActivity extends AppCompatActivity {
             Toast.makeText(this,"Contraseña muy corta",Toast.LENGTH_LONG).show();
             return;
         }
+        if(this.textNombre.getText().toString().length() < 1){
+            Toast.makeText(this,"Nombre invalido",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(this.textApellido.getText().toString().length() < 1){
+            Toast.makeText(this,"Apellido Invalido",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(this.textAlias.getText().toString().length() < 1){
+            Toast.makeText(this,"Alias Invalido",Toast.LENGTH_LONG).show();
+            return;
+        }
         newUserArgs.put("email",this.textCorreo.getText().toString());
         newUserArgs.put("first_name",this.textNombre.getText().toString());
         newUserArgs.put("last_name",this.textApellido.getText().toString());
