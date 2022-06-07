@@ -76,6 +76,7 @@ public class ARActivity extends Activity
             public void onFailure() {
             }
         });
+        this.setTitle("Reconocer QR");
     }
 
     private interface PermissionCallback

@@ -64,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 
         this.botonInvitado.setOnClickListener(view -> pressBotonInvitado());
         this.botonNuevoUsuario.setOnClickListener(view -> pressCrearUsuario());
+
+        this.setTitle("Login");
     }
 
     protected void pressBotonInvitado(){

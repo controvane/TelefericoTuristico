@@ -43,6 +43,7 @@ public class CambiarPassActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+        this.setTitle("Cambiar Contraseña");
     }
 
     protected void pressBotonChangePass() throws JSONException {

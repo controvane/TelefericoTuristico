@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.buttonOpciones).setOnClickListener(view -> infoOfUser(this.user));
+        this.setTitle("Guia Teleferico Turistico");
     }
 
     private void hideOptionsFragment(User user){

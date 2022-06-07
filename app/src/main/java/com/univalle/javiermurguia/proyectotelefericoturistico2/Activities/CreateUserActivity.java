@@ -42,6 +42,7 @@ public class CreateUserActivity extends AppCompatActivity {
         this.buttonCrearUsuario = findViewById(R.id.buttonCrearUsuario);
 
         this.buttonCrearUsuario.setOnClickListener(view -> createNewUser());
+        this.setTitle("Crear Nuevo Usuario");
     }
 
     public static boolean isValid(String email)
